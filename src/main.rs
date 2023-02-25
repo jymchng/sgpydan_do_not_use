@@ -5,7 +5,9 @@ mod builder;
 mod digits;
 mod prefix;
 mod suffix;
-mod python;
+
+#[cfg(feature = "python")]
+pub mod python;
 
 pub mod core;
 
