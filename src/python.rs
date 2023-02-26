@@ -3,14 +3,29 @@ use crate::core::NRIC;
 use crate::digits::ICDigits;
 use crate::prefix::ICPrefixEnum;
 use crate::suffix::ICSuffixEnum;
-use pyo3::{prelude::*, types::PyType, PyTypeInfo};
+use pyo3::{
+    class::iter::IterNextOutput,
+    prelude::*,
+    types::{PyDict, PyString, PyType},
+    marker::Python,
+    exceptions::{PyException, PyStopIteration},
+};
 use std::fmt;
+use std::vec::IntoIter;
 
 #[pyclass(name = "NRIC")]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PyNRIC {
     pub rust_nric: NRIC,
 }
+
+
+#[pyclass(name = "PyNRICContainer")]
+#[derive(Debug)]
+pub struct PyNRICContainer {
+  counter: u8
+}
+
 
 impl fmt::Display for PyNRIC {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -25,11 +40,12 @@ impl fmt::Display for PyNRIC {
 #[pymethods]
 impl PyNRIC {
     #[new]
-    pub fn new(string: String) -> PyResult<PyNRIC> {
+    fn new(string: String) -> PyResult<PyNRIC> {
         Ok(PyNRIC {
             rust_nric: NRIC::new(string).unwrap(),
         })
     }
+
 
     #[getter]
     fn get_prefix(&self) -> PyResult<String> {
@@ -50,12 +66,42 @@ impl PyNRIC {
         Ok(self.to_string())
     }
 
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(format!("<NRIC::{}>", self.to_string()))
-    }
+    // fn __repr__(&self) -> PyResult<String> {
+    //     Ok(format!("<NRIC::{}>", self.to_string()))
+    // }
 
     #[classmethod]
-    fn __get_validators__(_: &PyType) -> PyResult<()> {
-      Ok(())
+    fn __get_validators__(_cls: &PyType) -> PyResult<PyNRICContainer> {
+      Ok(PyNRICContainer {counter: 0})
+  }
+}
+
+#[pymethods]
+impl PyNRICContainer {
+
+  fn __iter__(mut slf: PyRefMut<'_, Self>) -> Option<PyRefMut<'_, Self>> {
+    if slf.counter == 0 {
+          slf.counter = slf.counter + 1;
+          Some(slf)
+        } else {
+          None
+        }
+  }
+
+    fn __next__(mut slf: PyRefMut<'_, Self>) -> IterNextOutput<PyRefMut<'_, Self>, &'static str> {
+      if slf.counter == 0 {
+          slf.counter = slf.counter + 1;
+          IterNextOutput::Yield(slf)
+        } else {
+          IterNextOutput::Return("NRIC is no longer iterable.")
+        }
+    }
+
+  #[classmethod]
+  fn __call__(_cls: &PyType, v: &PyString) -> PyResult<PyNRIC> {
+        let v: &str = v.extract()?;
+        Ok(PyNRIC {
+            rust_nric: NRIC::new(v).unwrap(),
+        })
     }
 }

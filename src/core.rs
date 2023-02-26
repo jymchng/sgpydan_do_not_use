@@ -5,7 +5,7 @@ use crate::suffix::ICSuffixEnum;
 use std::fmt;
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NRIC {
     pub prefix: ICPrefixEnum,
     pub digits: ICDigits,
