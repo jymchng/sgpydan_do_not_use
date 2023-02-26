@@ -5,10 +5,10 @@ use crate::prefix::ICPrefixEnum;
 use crate::suffix::ICSuffixEnum;
 use pyo3::{
     class::iter::IterNextOutput,
-    prelude::*,
-    types::{PyDict, PyString, PyType},
-    marker::Python,
     exceptions::{PyException, PyStopIteration},
+    marker::Python,
+    prelude::*,
+    types::{PyDict, PyString, PyType, PyAny},
 };
 use std::fmt;
 use std::vec::IntoIter;
@@ -19,13 +19,12 @@ pub struct PyNRIC {
     pub rust_nric: NRIC,
 }
 
-
 #[pyclass(name = "PyNRICContainer")]
 #[derive(Debug)]
 pub struct PyNRICContainer {
-  counter: u8
+    #[pyo3(get, set)]
+    boolean: bool,
 }
-
 
 impl fmt::Display for PyNRIC {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -45,7 +44,6 @@ impl PyNRIC {
             rust_nric: NRIC::new(string).unwrap(),
         })
     }
-
 
     #[getter]
     fn get_prefix(&self) -> PyResult<String> {
@@ -72,36 +70,41 @@ impl PyNRIC {
 
     #[classmethod]
     fn __get_validators__(_cls: &PyType) -> PyResult<PyNRICContainer> {
-      Ok(PyNRICContainer {counter: 0})
-  }
+        Ok(PyNRICContainer {boolean: true})
+    }
 }
 
 #[pymethods]
 impl PyNRICContainer {
 
-  fn __iter__(mut slf: PyRefMut<'_, Self>) -> Option<PyRefMut<'_, Self>> {
-    if slf.counter == 0 {
-          slf.counter = slf.counter + 1;
-          Some(slf)
-        } else {
-          None
-        }
-  }
+    // #[new]
+    // fn new() -> PyResult<PyNRICContainer> {
+    //     Ok(PyNRICContainer { boolean: true })
+    // }
+
+    fn __iter__(slf: PyRef<'_, Self>) -> PyRef<'_, Self> {
+        slf
+    }
 
     fn __next__(mut slf: PyRefMut<'_, Self>) -> IterNextOutput<PyRefMut<'_, Self>, &'static str> {
-      if slf.counter == 0 {
-          slf.counter = slf.counter + 1;
-          IterNextOutput::Yield(slf)
+        if slf.boolean {
+            slf.boolean = false;
+            IterNextOutput::Yield(slf)
         } else {
-          IterNextOutput::Return("NRIC is no longer iterable.")
+            IterNextOutput::Return("No Longer Iterable.")
         }
     }
 
-  #[classmethod]
-  fn __call__(_cls: &PyType, v: &PyString) -> PyResult<PyNRIC> {
-        let v: &str = v.extract()?;
-        Ok(PyNRIC {
-            rust_nric: NRIC::new(v).unwrap(),
-        })
+    #[classmethod]
+    fn __call__(cls: &PyType, v: &PyString) -> PyResult<PyNRIC> {
+        let v: String = v.extract()?;
+        PyNRIC::new(v)
     }
+
+    // #[pyo3(signature = "cls", "v", "values")]
+    // fn __call__(&mut self, py: Python<'_>, value: &PyString, values: Option<&PyDict>) -> PyResult<PyNRIC> {
+    //     let v: String = value.extract()?;
+    //     PyNRIC::new(v)
+    // }
+    
 }
