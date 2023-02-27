@@ -12,7 +12,7 @@ use crate::core::NRIC;
 use clap::{App, Arg};
 
 fn main() {
-    let matches = App::new("sgnricvali")
+    let matches = App::new("nric")
         .version("1.0")
         .author("DO NOT USE!")
         .about("CLI to validate NRIC from a text, DO NOT USE!")
