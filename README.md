@@ -16,7 +16,7 @@ The Singaporean NRIC has a [checksum algorithm](https://ivantay2003.medium.com/c
 
 The checksum algorithm is implemented using Rust, via the `TypeState` and `Builder` pattern.
 
-`Pyo3`, a Rust crate, is used to do rust-python bindings and the class `NRIC` within the python module is a Rust struct and its constructor is implemented with Rust.
+[`Pyo3`](https://docs.rs/pyo3/latest/pyo3/), a Rust crate, is used to do rust-python bindings and the class `NRIC` within the python module is a Rust struct and its constructor is implemented with Rust.
 
 ## Pydantic-compatible
 
@@ -48,10 +48,10 @@ if __name__ == '__main__':
 
 Output:
 ```
-name='Peter' nric=<NRIC::S9962669J>
-1 validation error for User
-nric
-  Prefix cannot be parsed. (type=value_error)
+...name='Peter' nric=<NRIC::S9962669J>
+...1 validation error for User
+...nric
+...  Prefix cannot be parsed. (type=value_error)
 ```
 This imples that the `user` has been successfully parsed into a `pydantic` model whereas `user_two` failed.
 
