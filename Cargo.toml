@@ -1,15 +1,39 @@
-[package]
-name = "sgnric_do_not_use"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+resolver = "2"
+members = [
+    "crates/nric",
+]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[lib]
-name = "sgnric_do_not_use"
-crate-type = ["cdylib"]
 
-[dependencies]
-pyo3 = { version = "0.16.5", features = ["extension-module"] }
-strum = "0.24"
-strum_macros = "0.24"
-clap = "3.0"
+[workspace.package]
+version = "0.0.1"
+
+[profile.release]
+# debug = 1 means line charts only, which is minimum needed for good stack traces
+debug = 1
+# Write debug info into a separate file.
+split-debuginfo = 'packed'
+strip = 'debuginfo'
+# Exit process with SIGABRT when any thread panics
+panic = 'abort'
+
+# Inherits from the release profile above.
+[profile.bench]
+# For convenience.
+strip = 'none'
+
+[profile.test.package.move-compiler]
+# opt-level 2 for move-compiler reduces the size of some of its
+# (recursive) stack frames by up to 10x, avoiding stack overflows.
+opt-level = 2
+
+[profile.simulator]
+inherits = "test"
+debug = true
+debug-assertions = true
+overflow-checks = true
+# opt-level 1 gives >5x speedup for simulator tests without slowing down build times very much.
+opt-level = 1
+
+[workspace.dependencies]
