@@ -2,7 +2,7 @@
 
 <div align="center">
 <h1>SGPYDAN</h1>
-<i>pydanic models for the Singaporean</i>
+<i>Rust-implemented python's pydanic models for Singaporeans</i>
 </div>
 
 <p>
