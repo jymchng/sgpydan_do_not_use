@@ -5,6 +5,7 @@ use crate::prefix::ICPrefixEnum;
 use crate::suffix::ICSuffixEnum;
 use pyo3::exceptions::{PyValueError, PyAttributeError};
 use pyo3::intern;
+use pyo3::types::PyTuple;
 use pyo3::{
     class::iter::IterNextOutput,
     exceptions::{PyException, PyStopIteration},
@@ -20,6 +21,7 @@ use std::vec::IntoIter;
 #[derive(Debug, Clone)]
 pub struct PyNRIC {
     pub rust_nric: NRIC,
+    boolean: bool,
 }
 
 #[pyclass(name = "PyNRICContainer")]
@@ -47,7 +49,8 @@ impl PyNRIC {
         let new_nric = NRIC::new(string);
         match new_nric {
             Ok(new_nric) => Ok(PyNRIC {
-                rust_nric: new_nric
+                rust_nric: new_nric,
+                boolean: true
             }),
             Err(err) => Err(PyValueError::new_err(err)),
         }
@@ -76,22 +79,30 @@ impl PyNRIC {
         Ok(format!("<NRIC::{}>", self.to_string()))
     }
 
-    #[classmethod]
-    pub fn __get_validators__(cls: &PyType) -> PyResult<&PyIterator> {
-        let func = cls.getattr(intern!(cls.py(), "validate"));
-        match func {
-            Ok(func) => {
-                if let Ok(funciter) = func.iter() {
-                    return Ok(funciter)
-                } else {
-                    return Err(PyAttributeError::new_err("`validate` method is not found!"))
-                }
-            },
-            Err(err) => Err(err),
-        }
-    }
+
+    // pub fn __iter__(slf: PyRef<'_, Self>) -> PyRef<'_, Self> {
+    //     slf
+    // }
 
     #[classmethod]
+    pub fn __get_validators__(cls: &PyType) -> PyResult<&PyTuple> {
+       let py = cls.py();
+       let func = cls.getattr(intern!(py, "validate"))?;
+       Ok(PyTuple::new(py, vec![func]))
+    }
+
+    // so the trick is to implement `__next__` for PyNRIC and returning the Yield(function)
+    // then also implement `__iter__`
+    // pub fn __next__(slf: &PyCell<Self>) -> IterNextOutput<&PyAny, &'static str> {
+    //     let func = slf.get_type().getattr(intern!(slf.py(), "validate"));
+    //     match func {
+    //         Ok(func) => IterNextOutput::Yield(func),
+    //         Err(_err) => IterNextOutput::Return("No longer iterable.")
+    //     }
+    // }
+
+    #[classmethod]
+    #[pyo3(text_signature="(cls, value, values)")]
     pub fn validate(cls: &PyType, value: &PyString) -> PyResult<PyNRIC> {
         let v: String = value.extract()?;
         PyNRIC::new(v)
