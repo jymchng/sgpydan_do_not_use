@@ -92,7 +92,7 @@ impl PyNRIC {
     }
 
     // so the trick is to implement `__next__` for PyNRIC and returning the Yield(function)
-    // then also implement `__iter__`
+    // then also implement `__iter__`; only `__next__` can return IterNextOutput enum
     // pub fn __next__(slf: &PyCell<Self>) -> IterNextOutput<&PyAny, &'static str> {
     //     let func = slf.get_type().getattr(intern!(slf.py(), "validate"));
     //     match func {
@@ -102,8 +102,8 @@ impl PyNRIC {
     // }
 
     #[classmethod]
-    #[pyo3(text_signature="(cls, value)")]
-    pub fn validate(_cls: &PyType, value: &PyAny) -> PyResult<PyNRIC> {
+    #[pyo3(text_signature="(value)")]
+    pub fn validate(cls: &PyType, value: &PyAny) -> PyResult<PyNRIC> {
         let v: String = value.extract::<String>()?;
         PyNRIC::new(v)
     }
