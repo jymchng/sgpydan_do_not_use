@@ -11,6 +11,7 @@ class User(BaseModel):
 if __name__ == '__main__': 
   
   user = User(name='Peter', nric='S9962669J')
+  print(user)
   try:
     user_two = User(name='Peter', nric='B9962669J')
     print(user_two)
