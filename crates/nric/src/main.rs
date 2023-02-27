@@ -1,6 +1,3 @@
-#![allow(unused_imports)]
-#![allow(dead_code)]
-
 mod builder;
 mod digits;
 mod prefix;
