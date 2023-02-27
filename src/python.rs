@@ -102,9 +102,9 @@ impl PyNRIC {
     // }
 
     #[classmethod]
-    #[pyo3(text_signature="(cls, value, values)")]
-    pub fn validate(cls: &PyType, value: &PyString) -> PyResult<PyNRIC> {
-        let v: String = value.extract()?;
+    #[pyo3(text_signature="(cls, value)")]
+    pub fn validate(_cls: &PyType, value: &PyAny) -> PyResult<PyNRIC> {
+        let v: String = value.extract::<String>()?;
         PyNRIC::new(v)
     }
 
