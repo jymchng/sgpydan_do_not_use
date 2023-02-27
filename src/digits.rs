@@ -68,7 +68,6 @@ impl TryFrom<String> for ICDigits {
     type Error = &'static str;
 
     fn try_from(string_value: String) -> Result<Self, Self::Error> {
-      
         if string_value.len() > 7 {
             return Err("String is too long to fit in an array of 7 digits");
         }

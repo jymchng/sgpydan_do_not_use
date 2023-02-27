@@ -1,7 +1,7 @@
 use crate::core::NRIC;
 use crate::digits::ICDigits;
 use crate::prefix::{ICPrefix, ICPrefixEnum};
-use crate::suffix::{ICSuffix, ICSuffixEnum};
+use crate::suffix::ICSuffixEnum;
 
 #[derive(Default, Clone)]
 pub struct NoICPrefix;
@@ -30,15 +30,11 @@ impl<D, S> NRICBuilder<NoICPrefix, D, S> {
     ) -> Result<NRICBuilder<ICPrefix, D, S>, &'static str> {
         let prefix_enum: Result<ICPrefixEnum, _> = prefix.into().parse();
         match prefix_enum {
-            Ok(prefix_enum) => {
-              Ok(
-                NRICBuilder {
-                  prefix: Some(ICPrefix(prefix_enum)),
-                  digits: self.digits,
-                  suffix: self.suffix,
-                }
-              )
-            },
+            Ok(prefix_enum) => Ok(NRICBuilder {
+                prefix: Some(ICPrefix(prefix_enum)),
+                digits: self.digits,
+                suffix: self.suffix,
+            }),
             Err(_) => Err("Prefix cannot be parsed."),
         }
     }
@@ -49,15 +45,23 @@ impl<S> NRICBuilder<ICPrefix, NoICDigits, S> {
         self,
         value: T,
     ) -> Result<NRICBuilder<ICPrefix, ICDigits, S>, &'static str> {
-        let ic_digits: Result<ICDigits, _> = value.try_into();
-        match ic_digits {
-            Ok(ic_digits) => Ok(NRICBuilder {
+        if let Ok(ic_digits) = value.try_into() {
+            Ok(NRICBuilder {
                 prefix: self.prefix,
                 digits: Some(ic_digits),
                 suffix: self.suffix,
-            }),
-            Err(_) => Err("Digits cannot be parsed."),
+            })
+        } else {
+            Err("Digits cannot be parsed.")
         }
+        // match ic_digits {
+        //     Ok(ic_digits) => Ok(NRICBuilder {
+        //         prefix: self.prefix,
+        //         digits: Some(ic_digits),
+        //         suffix: self.suffix,
+        //     }),
+        //     Err(_) => Err("Digits cannot be parsed."),
+        // }
     }
 }
 
@@ -75,11 +79,10 @@ impl NRICBuilder<ICPrefix, ICDigits, NoICSuffix> {
         let suffix_enum: Result<ICSuffixEnum, _> = suffix.into().parse();
         match suffix_enum {
             Ok(suffix_enum) => {
-                let suffix_value = suffix_enum.value();
                 let inner_prod = inner_product(&self.digits.as_ref().unwrap().0, &WEIGHTS);
                 let prefix_value = self.prefix.as_ref().unwrap().0.value() as u16;
                 let validity = (inner_prod + prefix_value) % 11;
-                if suffix_value as u16 == validity {
+                if suffix_enum.value() as u16 == validity {
                     Ok(NRIC {
                         prefix: self.prefix.unwrap().0,
                         digits: self.digits.unwrap(),
@@ -160,26 +163,26 @@ mod tests {
         assert_eq!(inner_product(&array_a, &array_b), 7);
     }
 
-  #[test]
+    #[test]
     fn test_suffix() {
         let nric = NRICBuilder::new()
-          .prefix("T")
-          .unwrap()
-          .digits("0036447")
-          .unwrap()
-          .suffix("E")
-          .unwrap();
+            .prefix("T")
+            .unwrap()
+            .digits("0036447")
+            .unwrap()
+            .suffix("E")
+            .unwrap();
         assert_eq!(nric.suffix, ICSuffixEnum::E);
     }
 
     #[test]
     fn test_suffix_err() {
         let nric = NRICBuilder::new()
-          .prefix("T")
-          .unwrap()
-          .digits("0036447")
-          .unwrap()
-          .suffix("F");
+            .prefix("T")
+            .unwrap()
+            .digits("0036447")
+            .unwrap()
+            .suffix("F");
 
         assert!(nric.is_err());
     }

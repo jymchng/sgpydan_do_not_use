@@ -11,8 +11,8 @@ pub mod python;
 
 pub mod core;
 
-use clap::{App, Arg};
 use crate::core::NRIC;
+use clap::{App, Arg};
 
 fn main() {
     let matches = App::new("sgnricvali")

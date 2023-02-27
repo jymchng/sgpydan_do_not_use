@@ -1,9 +1,8 @@
-use crate::builder::{NRICBuilder, NoICDigits, NoICPrefix, NoICSuffix};
+use crate::builder::NRICBuilder;
 use crate::digits::ICDigits;
 use crate::prefix::ICPrefixEnum;
 use crate::suffix::ICSuffixEnum;
 use std::fmt;
-
 
 #[derive(Debug, Clone)]
 pub struct NRIC {
@@ -17,7 +16,6 @@ impl fmt::Display for NRIC {
         write!(f, "{}{}{}", self.prefix, self.digits, self.suffix)
     }
 }
-
 
 impl NRIC {
     pub fn new(string: impl Into<String>) -> Result<NRIC, &'static str> {
