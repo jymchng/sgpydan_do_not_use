@@ -1,0 +1,15 @@
+[package]
+name = "nric_do_not_use"
+version.workspace = true
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "nric_do_not_use"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.16.5", features = ["extension-module"] }
+strum = "0.24"
+strum_macros = "0.24"
+clap = "3.0"
