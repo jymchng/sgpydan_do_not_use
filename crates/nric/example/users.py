@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ValidationError
 from nric_do_not_use import NRIC
+from inspect import signature
 
 class User(BaseModel):
     name: str
