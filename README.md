@@ -59,7 +59,7 @@ This imples that the `user` has been successfully parsed into a `pydantic` model
 ### Python Rust Binding
 The definition of rust struct `PyNRIC` which is mapped to python's type `NRIC` is given below:
 
-```
+```rust
 #[pyclass(name = "NRIC")]
 #[derive(Debug, Clone)]
 pub struct PyNRIC {
@@ -88,7 +88,7 @@ To make the python class `NRIC` compatible with `pydantic`, one has to implement
 
 An example from the pydantic's [docs](https://docs.pydantic.dev/usage/types/#classes-with-__get_validators__) is given below:
 
-```
+```python
 class PostCode(str):
 
     @classmethod
@@ -112,7 +112,7 @@ To that end, my first solution was to create another rust wrapper struct, call i
 The `__next__` rust implementation via `pyo3` is a bit special as it has to return an enum `IterNextOutput` for it to be 'yield'-able (if my understanding is right).
 
 It looks something like:
-```
+```rust
 // omitted...
 pub fn __next__(mut slf: PyRefMut<'_, Self>) -> IterNextOutput<PyRefMut<'_, Self>, &'static str> {
         if slf.boolean {
@@ -137,7 +137,7 @@ What happens is that `inspect.signature` function is unable to recognize the 'si
 
 In the end, the solution is to call python from rust. Which is abit lol but it's fine because the cost is minor.
 
-```
+```rust
 // omitted...
     #[classmethod]
     pub fn __get_validators__(cls: &PyType) -> PyResult<&PyTuple> {
@@ -156,7 +156,7 @@ In the end, the solution is to call python from rust. Which is abit lol but it's
 ```
 
 Which is syntatically identical to the following python codes:
-```
+```python
 @classmethod
 def __get_validators__(cls: NRIC) -> Tuple[NRIC]:
     return cls.validate,
