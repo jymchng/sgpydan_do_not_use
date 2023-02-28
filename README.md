@@ -109,7 +109,7 @@ The difficulty is: how do you 'yield' a python's `classmethod` from rust?
 
 To that end, my first solution was to create another rust wrapper struct, call it `ContainerStruct`, and implement the following python 'interface' ('magic'/'dunder'; whatever) methods: `__iter__`, `__next__` and `__call__`, so `CustomPyType.__get_validators__` can simply return this wrapper struct, `ContainerStruct`.
 
-The `__next__` rust implemention via `pyo3` is a bit special as it has to return an enum `IterNextOutput` for it to be 'yield'-able (if my understanding is right).
+The `__next__` rust implementation via `pyo3` is a bit special as it has to return an enum `IterNextOutput` for it to be 'yield'-able (if my understanding is right).
 
 It looks something like:
 ```
@@ -131,7 +131,7 @@ This works (you can yield it) but another issue was encountered.
 
 pydantic uses `inspect.signature` to get the arguments passed into any 'validating' function (e.g. `cls.validate` in this case) and re-invoke the 'validating' function by first, inspecting the arguments passed, e.g. whether the first argument is named 'self' or 'cls' etc., then second, call the 'validating' function with the 'appropriate' arguments passed in. [(Details)](https://github.com/pydantic/pydantic/blob/v1.10.5/pydantic/class_validators.py#L234-L333).
 
-What happens is the `inspect.signature` function is unable to recognize the 'signature' of the `ContainerStruct`'s `__call__` method. A 'solution' is documented on `pyo3`'s [docs](https://pyo3.rs/v0.18.1/function/signature) but doesn't work in my case because 1) `__call__` cannot be annotated with `#[pyo3(text_signature=...)]` and 2) even annotating it with `#[pyo3(signature=...)]` which can compile but encounters the same exception in python because `__text_signature__` is not generated for the object. [(See issue related)](https://github.com/PyO3/pyo3/issues/2992).
+What happens is that `inspect.signature` function is unable to recognize the 'signature' of the `ContainerStruct`'s `__call__` method. A 'solution' is documented on `pyo3`'s [docs](https://pyo3.rs/v0.18.1/function/signature) but doesn't work in my case because 1) `__call__` cannot be annotated with `#[pyo3(text_signature=...)]` and 2) even annotating it with `#[pyo3(signature=...)]` which can compile but encounters the same exception in python because `__text_signature__` is not generated for the object. [(See issue related)](https://github.com/PyO3/pyo3/issues/2992).
 
 ## Call Python in Rust
 
