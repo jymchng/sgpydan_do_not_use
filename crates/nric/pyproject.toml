@@ -13,3 +13,12 @@ classifiers = [
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+
+[tool.poetry]
+name = "nric_do_not_use"
+version = "0.1.0"
+description = "Custom `NRIC` python type, implemented in Rust, just for fun. Do not use for anything serious."
+authors = [""]
+
+[tool.poetry.dependencies]
+pydantic = { version = "^1.10.5", python = ">=3.7" }
