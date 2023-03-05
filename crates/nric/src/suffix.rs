@@ -1,8 +1,6 @@
-use pyo3::prelude::*;
 use std::ops::Deref;
 use strum_macros::{self, Display, EnumString};
 
-#[pyclass]
 #[derive(Debug, Eq, PartialEq, Display, EnumString, Clone)]
 #[strum(serialize_all = "UPPERCASE")]
 #[strum(ascii_case_insensitive)]
@@ -31,7 +29,7 @@ pub enum ICSuffixEnum {
     X,
 }
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub struct ICSuffix(pub ICSuffixEnum);
 
 impl ICSuffixEnum {

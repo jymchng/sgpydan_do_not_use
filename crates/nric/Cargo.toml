@@ -8,6 +8,10 @@ edition = "2021"
 name = "nric_do_not_use"
 crate-type = ["cdylib"]
 
+[[bin]]
+name = "nric-app"
+path = "src/nric_app.rs"
+
 [dependencies]
 pyo3 = { version = "0.16.5", features = ["extension-module"] }
 strum = "0.24"
