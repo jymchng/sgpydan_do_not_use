@@ -17,6 +17,7 @@ fn main() {
                           .get_matches();
 
     let key = generate_aes256_key();
+    println!("{:?}, len={:?}", &key, &key.len());
     let encoded_key: String = general_purpose::STANDARD_NO_PAD.encode(&key);
 
     if let Some(filename) = matches.value_of("out") {

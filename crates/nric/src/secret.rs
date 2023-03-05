@@ -6,8 +6,8 @@ use base64::{engine::general_purpose, Engine as _};
 use dotenv;
 use rand::{rngs::OsRng, RngCore};
 use serde::{Deserialize, Serialize};
-use std::env;
 use std::dbg;
+use std::env;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SecretNRICString {
@@ -40,13 +40,23 @@ impl SecretNRICString {
         // Find the value of the SECRET_KEY variable
         let secret_key = env::var(key_var)
             .map_err(|err| anyhow!("SECRET_KEY not found in `.env` file, err={}", err))?;
-        dbg!(&secret_key, &secret_key.as_bytes(), &secret_key.len());
+        let secret_key: Vec<u8> = general_purpose::STANDARD_NO_PAD
+            .decode(&secret_key)
+            .map_err(|err| anyhow!("`SECRET_KEY` cannot be decoded, err={}", err))?;
+        dbg!(&secret_key, &secret_key.len());
+        let secret_array: [u8; 32] = secret_key.as_slice().try_into().map_err(|err| {
+            anyhow!(
+                "`secret_key` cannot be converted to `[u8,32]`, err: {}",
+                err
+            )
+        })?;
+        dbg!(&secret_array, &secret_array.len());
         // Generate a random nonce
         let mut nonce = [0u8; 12];
         rand::thread_rng().fill_bytes(&mut nonce);
 
         // Create the AES-256-GCM cipher
-        let cipher = Aes256Gcm::new_from_slice(secret_key.as_bytes())
+        let cipher = Aes256Gcm::new_from_slice(&secret_array)
             .map_err(|err| anyhow!("Error creating cipher from secret key, err={}", err))?;
 
         // Encrypt the input string using the cipher and nonce
@@ -78,7 +88,18 @@ impl SecretNRICString {
         // Find the value of the SECRET_KEY variable
         let secret_key = env::var(key_var)
             .map_err(|err| anyhow!("SECRET_KEY not found in `.env` file, err={}", err))?;
-
+        let secret_key: Vec<u8> = general_purpose::STANDARD_NO_PAD
+            .decode(&secret_key)
+            .map_err(|err| anyhow!("`SECRET_KEY` cannot be decoded, err={}", err))?;
+        dbg!(&secret_key, &secret_key.len());
+        let secret_array: [u8; 32] = secret_key.as_slice().try_into().map_err(|err| {
+            anyhow!(
+                "`secret_key` cannot be converted to `[u8,32]`, err: {}",
+                err
+            )
+        })?;
+        dbg!(&secret_array, &secret_array.len());
+        
         // Decode the Base64-encoded input string into a byte vector
         let encrypted_data = general_purpose::STANDARD_NO_PAD
             .decode(&input)
@@ -93,7 +114,7 @@ impl SecretNRICString {
             .ok_or_else(|| anyhow!("Error extracting ciphertext from encrypted data"))?;
 
         // Create the AES-256-GCM cipher
-        let cipher = Aes256Gcm::new_from_slice(secret_key.as_bytes())
+        let cipher = Aes256Gcm::new_from_slice(&secret_array)
             .map_err(|err| anyhow!("Error creating cipher from secret key, err={}", err))?;
 
         // Decrypt the ciphertext using the cipher and nonce
