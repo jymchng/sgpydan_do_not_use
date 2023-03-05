@@ -1,6 +1,6 @@
+use pyo3::prelude::*;
 use std::ops::Deref;
 use strum_macros::{self, Display, EnumString};
-use pyo3::prelude::*;
 
 #[pyclass]
 #[derive(Debug, Eq, PartialEq, Display, EnumString, Clone)]

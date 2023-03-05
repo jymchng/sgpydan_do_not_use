@@ -1,5 +1,5 @@
-use crate::nric::NRIC;
 use crate::digits::ICDigits;
+use crate::nric::NRIC;
 use crate::prefix::{ICPrefix, ICPrefixEnum};
 use crate::suffix::ICSuffixEnum;
 
