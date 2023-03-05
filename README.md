@@ -20,7 +20,7 @@ The checksum algorithm is implemented using Rust, via the `TypeState` and `Build
 
 ## Pydantic-compatible
 
-The python class `NRIC` is compatible with a popular third-party python package [`pydantic`](https://docs.pydantic.dev/) for parsing and validation of data models.
+The python class `NRIC`, implemented in Rust using the `TypeState` and `Builder` patterns, is compatible with a popular third-party python package [`pydantic`](https://docs.pydantic.dev/) for parsing and validation of data models.
 
 Example:
 
