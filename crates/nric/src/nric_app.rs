@@ -18,6 +18,8 @@ fn main() {
         .about("CLI to validate NRIC from a text, DO NOT USE!")
         .arg(
             Arg::with_name("INPUT")
+                .short('i')
+                .long("input")
                 .help("Your Input String")
                 .required(true)
                 .index(1),

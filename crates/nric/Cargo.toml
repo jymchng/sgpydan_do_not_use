@@ -12,11 +12,18 @@ crate-type = ["cdylib"]
 name = "nric-app"
 path = "src/nric_app.rs"
 
+[[bin]]
+name = "gen-keys"
+path = "src/gen_keys.rs"
+
 [dependencies]
-pyo3 = { version = "0.16.5", features = ["extension-module"] }
+pyo3 = { version = "0.16.6", features = ["extension-module"] }
 strum = "0.24"
 strum_macros = "0.24"
 clap = "3.0"
 dotenv = "0.15"
-serde = "1.0.152"
-serde-encrypt = "0.7.0"
+serde = { version = "1.0.152", features = ["derive"] }
+anyhow = "1.0.69"
+aes-gcm = "0.10.1"
+rand = "0.8.5"
+base64 = "0.21.0"

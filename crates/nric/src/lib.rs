@@ -3,6 +3,7 @@ mod digits;
 mod prefix;
 mod python;
 mod suffix;
+mod secret;
 
 pub mod nric;
 
