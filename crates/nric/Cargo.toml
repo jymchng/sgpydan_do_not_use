@@ -13,3 +13,6 @@ pyo3 = { version = "0.16.5", features = ["extension-module"] }
 strum = "0.24"
 strum_macros = "0.24"
 clap = "3.0"
+dotenv = "0.15"
+serde = "1.0.152"
+serde-encrypt = "0.7.0"

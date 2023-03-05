@@ -3,6 +3,7 @@ use crate::digits::ICDigits;
 use crate::prefix::ICPrefixEnum;
 use crate::suffix::ICSuffixEnum;
 use std::fmt;
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone)]
 pub struct NRIC {
