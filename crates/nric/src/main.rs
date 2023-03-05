@@ -6,9 +6,9 @@ mod suffix;
 #[cfg(feature = "python")]
 pub mod python;
 
-pub mod core;
+pub mod nric;
 
-use crate::core::NRIC;
+use crate::nric::NRIC;
 use clap::{App, Arg};
 
 fn main() {

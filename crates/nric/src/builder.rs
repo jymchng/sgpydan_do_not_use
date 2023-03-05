@@ -1,4 +1,4 @@
-use crate::core::NRIC;
+use crate::nric::NRIC;
 use crate::digits::ICDigits;
 use crate::prefix::{ICPrefix, ICPrefixEnum};
 use crate::suffix::ICSuffixEnum;

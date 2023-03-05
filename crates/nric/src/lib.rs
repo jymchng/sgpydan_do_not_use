@@ -4,7 +4,7 @@ mod prefix;
 mod python;
 mod suffix;
 
-pub mod core;
+pub mod nric;
 
 use crate::python::opennric::PyNRIC;
 use crate::python::secretnric::SecretNRIC;
