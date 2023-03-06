@@ -20,5 +20,9 @@ version = "0.1.0"
 description = "Custom `NRIC` python type, implemented in Rust, just for fun. Do not use for anything serious."
 authors = [""]
 
-[tool.poetry.dependencies]
+[tool.poetry.dev.dependencies]
 pydantic = { version = "^1.10.5", python = ">=3.7" }
+
+[tool.pytest.ini_options]
+python_files = ["test_*.py", "*_test.py", "python/nric_do_not_use/tests"]
+python_functions = ["test"]

@@ -92,3 +92,4 @@ target/
 
 #/target
 *.ipybn_checkpoints
+*.venv*
