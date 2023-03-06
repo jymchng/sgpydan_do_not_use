@@ -47,7 +47,7 @@ impl<S> NRICBuilder<ICPrefix, NoICDigits, S> {
         self,
         value: T,
     ) -> Result<NRICBuilder<ICPrefix, ICDigits, S>, &'static str> {
-        if let Ok(ic_digits) = value.try_into() {
+        if let Ok(ic_digits) = ICDigits::try_parse(value) {
             Ok(NRICBuilder {
                 prefix: self.prefix,
                 digits: Some(ic_digits),
