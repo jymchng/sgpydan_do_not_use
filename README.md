@@ -13,10 +13,8 @@ This is a student project. This is done just for fun. Please do not use this for
 
 
 [![Actions](https://img.shields.io/github/actions/workflow/status/jymchng/sgpydantic_do_not_use/test.yml?branch=main&logo=github&style=flat-square&maxAge=300)](https://github.com/jymchng/sgpydantic_do_not_use/actions)
-[![Coverage](https://img.shields.io/codecov/c/gh/jymchng/sgpydantic_do_not_use/branch/main.svg?style=flat-square&maxAge=3600)](https://codecov.io/gh/jymchng/sgpydantic_do_not_use/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square&maxAge=2678400)](https://choosealicense.com/licenses/mit/)
 [![Source](https://img.shields.io/badge/source-GitHub-303030.svg?maxAge=2678400&style=flat-square)](https://github.com/jymchng/sgpydantic_do_not_use/)
-[![Mirror](https://img.shields.io/badge/mirror-EMBL-009f4d?style=flat-square&maxAge=2678400)](https://git.embl.de/larralde/sgpydantic_do_not_use/)
 [![Changelog](https://img.shields.io/badge/keep%20a-changelog-8A0707.svg?maxAge=2678400&style=flat-square)](https://github.com/jymchng/sgpydantic_do_not_use/blob/master/CHANGELOG.md)
 
 
