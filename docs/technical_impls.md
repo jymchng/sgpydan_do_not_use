@@ -1,4 +1,5 @@
 ## Implementation Details for python type `NRIC`
+
 ### Python Rust Binding
 The definition of rust struct `PyNRIC` which is mapped to python's type `NRIC` is given below:
 

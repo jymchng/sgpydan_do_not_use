@@ -1,4 +1,5 @@
 use crate::nric::NRIC;
+use crate::secret::SecretNRICString;
 use pyo3::exceptions::PyValueError;
 use pyo3::intern;
 use pyo3::types::PyTuple;
@@ -6,23 +7,11 @@ use pyo3::{
     prelude::*,
     types::{PyAny, PyType},
 };
-use std::fmt;
-use crate::secret::SecretNRICString;
 
 #[pyclass(name = "SecretNRIC")]
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct PySecretNRIC {
-    pub rust_nric: NRIC,
-}
-
-impl fmt::Display for PySecretNRIC {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{}{}{}",
-            self.rust_nric.prefix, self.rust_nric.digits, self.rust_nric.suffix
-        )
-    }
+    pub rust_secret_nric: SecretNRICString,
 }
 
 #[pymethods]
@@ -31,8 +20,8 @@ impl PySecretNRIC {
     pub fn new(string: String) -> PyResult<Self> {
         let new_nric = NRIC::new(string);
         match new_nric {
-            Ok(new_nric) => Ok(Self {
-                rust_nric: new_nric,
+            Ok(new_nric) => Ok(PySecretNRIC {
+                rust_secret_nric: SecretNRICString::new(new_nric),
             }),
             Err(err) => Err(PyValueError::new_err(err)),
         }
@@ -47,8 +36,7 @@ impl PySecretNRIC {
     }
 
     pub fn encrypt(&self, filepath: &str, key: &str) -> anyhow::Result<String> {
-        let secret_string = SecretNRICString::new(&self.rust_nric);
-        Ok(secret_string.encrypt(filepath, key)?)
+        Ok(self.rust_secret_nric.encrypt(filepath, key)?)
     }
 
     #[staticmethod]

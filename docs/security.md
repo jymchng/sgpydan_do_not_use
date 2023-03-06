@@ -51,6 +51,6 @@ gc.get_referrers(p)
 ... {}, '__builtins__': <module 'builtins' (built-in)>, 'SecretNRIC': <class 'builtins.SecretNRIC'>, 'p': <SECRETNRIC>, 'gc': <module 'gc' (built-in)>}]
 ```
 
-# Bad
+# Accesses to the 'secret' value is gated by encryption
 
-1. Unserializable but it's okay because the real value existed somewhere in Rust memory.
+`.encrypt()` and `.decrypt()` methods are provided to access the 'secret' value.

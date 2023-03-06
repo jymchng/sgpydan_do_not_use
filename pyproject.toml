@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "sgpydantic"
+version = "0.0.1"
+description = "Provides pydantic-compatible and more secured data models in the Singaporean context."
+authors = ["Jim Chng <jimchng@outlook.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.group.dev.dependencies]
+maturin = "^0.14.15"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

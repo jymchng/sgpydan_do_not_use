@@ -21,7 +21,7 @@ impl std::fmt::Display for SecretNRICString {
 }
 
 impl SecretNRICString {
-    pub fn new(nric: &NRIC) -> Self {
+    pub fn new(nric: NRIC) -> Self {
         SecretNRICString {
             secret: nric.to_string(),
         }

@@ -1,4 +1,4 @@
-<h1><center>DO NOT USE THIS IN ANYTHING SERIOUS!</center></h1>
+<h1><div align="center">DO NOT USE THIS FOR ANYTHING SERIOUS!</div></h1>
 
 <div align="center">
 <h1>SGPYDANTIC</h1>
@@ -16,7 +16,25 @@ The Singaporean NRIC has a [checksum algorithm](https://ivantay2003.medium.com/c
 
 The checksum algorithm is implemented using Rust, via the `TypeState` and `Builder` pattern.
 
-[`Pyo3`](https://docs.rs/pyo3/latest/pyo3/), a Rust crate, is used to do rust-python bindings and the class `NRIC` within the python module is a Rust struct and its constructor is implemented with Rust.
+[`Pyo3`](https://docs.rs/pyo3/latest/pyo3/), a Rust crate, is used to do rust-python bindings and the classes `NRIC` and `SecretNRIC` within the python module are both implemented as Rust structs.
+
+
+## `SecretNRIC` is slightly more secured than pure-python implementations
+
+### 1. It is Uninheritable
+
+`SecretNRIC` is uninheritable.
+
+### 2. It cannot be found via `inspect.getmembers`, `vars`, `dir` and `gc.get_referrers`
+
+Doesn't mean it is 'secured' because the value of the 'hidden' `NRIC` can still be found by calculating the 'offset' to the memory address. But it does help with preventing leaking of sensitive information since the actual value is not easily accessible.
+
+### 3. `.encrypt()` and `.decrypt()` methods give access to 'secret' value using encryption
+
+### 4. Can its 'secret' value still be found?
+The answer is **yes**: [see discussion on pyo3](https://github.com/PyO3/pyo3/discussions/3003#discussioncomment-5201863).
+
+Nonetheless, it does have the chance of making python apps a lot more secured since the 'secret' value requires some additional difficulty to 'retrieve'. It reduces the chances that 'secret' values are leaked 'accidentally'.
 
 ## Pydantic-compatible
 
@@ -32,9 +50,7 @@ class User(BaseModel):
     name: str
     nric: NRIC
 
-    class Config:
-      arbitrary_types_allowed = True
-    
+
 if __name__ == '__main__': 
   
   user = User(name='Peter', nric='S9962669J')
@@ -54,16 +70,6 @@ Output:
 ...   Prefix cannot be parsed. (type=value_error)
 ```
 This imples that the `user` has been successfully parsed into a `pydantic` model whereas `user_two` failed.
-
-## Slightly more secured than pure-python implementations
-
-### Uninheritable
-
-`SecretNRIC` is uninheritable.
-
-### Cannot be found via `inspect.getmembers`, `vars`, `dir` and `gc.get_referrers`
-
-Doesn't mean it is 'secured' because the value of the 'hidden' `NRIC` can still be found by calculating the 'offset' to the memory address. But it does help with preventing leaking of sensitive information since the actual value is not easily accessible.
 
 ## Why do this?
 
