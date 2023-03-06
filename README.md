@@ -48,12 +48,22 @@ if __name__ == '__main__':
 
 Output:
 ```
-...name='Peter' nric=<NRIC::S9962669J>
-...1 validation error for User
-...nric
-...  Prefix cannot be parsed. (type=value_error)
+... name='Peter' nric=<NRIC::S9962669J>
+... 1 validation error for User
+... nric
+...   Prefix cannot be parsed. (type=value_error)
 ```
 This imples that the `user` has been successfully parsed into a `pydantic` model whereas `user_two` failed.
+
+## Slightly more secured than pure-python implementations
+
+### Uninheritable
+
+`SecretNRIC` is uninheritable.
+
+### Cannot be found via `inspect.getmembers`, `vars`, `dir` and `gc.get_referrers`
+
+Doesn't mean it is 'secured' because the value of the 'hidden' `NRIC` can still be found by calculating the 'offset' to the memory address. But it does help with preventing leaking of sensitive information since the actual value is not easily accessible.
 
 ## Why do this?
 

@@ -21,13 +21,13 @@ impl std::fmt::Display for SecretNRICString {
 }
 
 impl SecretNRICString {
-    fn new(nric: NRIC) -> Self {
+    pub fn new(nric: &NRIC) -> Self {
         SecretNRICString {
             secret: nric.to_string(),
         }
     }
 
-    fn encrypt(&self, filepath: &str, key_var: &str) -> Result<String> {
+    pub fn encrypt(&self, filepath: &str, key_var: &str) -> Result<String> {
         let input: String = self.secret.to_owned();
         // Load the environment variables from the `.env` file
         dotenv::from_filename(filepath).map_err(|err| {
@@ -75,8 +75,8 @@ impl SecretNRICString {
         Ok(encrypted_string)
     }
 
-    fn decrypt(&self, filepath: &str, key_var: &str) -> Result<String> {
-        let input = &self.secret.to_owned();
+    pub fn decrypt(input: impl Into<String>, filepath: &str, key_var: &str) -> Result<String> {
+        let input: String = input.into();
         // Load the environment variables from the `.env` file
         dotenv::from_filename(filepath).map_err(|err| {
             anyhow!(
@@ -144,10 +144,10 @@ mod tests {
         let key_var = "SECRET_KEY";
 
         // Encrypt the plaintext using the encrypt_string function
-        let _encrypted_string = secret_nric_string.encrypt(filepath, key_var)?;
-
+        let encrypted_string = secret_nric_string.encrypt(filepath, key_var)?;
+        dbg!(&encrypted_string);
         // Decrypt the encrypted string using the decrypt_string function
-        let decrypted_string = secret_nric_string.decrypt(filepath, key_var)?;
+        let decrypted_string = SecretNRICString::decrypt(encrypted_string, filepath, key_var)?;
 
         // Check that the decrypted string matches the original plaintext
         assert_eq!(decrypted_string, secret_nric_string.secret);

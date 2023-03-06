@@ -3,6 +3,8 @@ use crate::nric::NRIC;
 use crate::prefix::{ICPrefix, ICPrefixEnum};
 use crate::suffix::ICSuffixEnum;
 
+const WEIGHTS: [u8; 7] = [2, 7, 6, 5, 4, 3, 2];
+
 #[derive(Default, Clone)]
 pub struct NoICPrefix;
 #[derive(Default, Clone)]
@@ -72,7 +74,6 @@ fn inner_product(arr1: &[u8; 7], arr2: &[u8; 7]) -> u16 {
         .sum()
 }
 
-const WEIGHTS: [u8; 7] = [2, 7, 6, 5, 4, 3, 2];
 
 impl NRICBuilder<ICPrefix, ICDigits, NoICSuffix> {
     pub fn suffix(self, suffix: impl Into<String>) -> Result<NRIC, &'static str> {

@@ -7,14 +7,15 @@ use pyo3::{
     types::{PyAny, PyType},
 };
 use std::fmt;
+use crate::secret::SecretNRICString;
 
 #[pyclass(name = "SecretNRIC")]
 #[derive(Debug, Clone)]
-pub struct SecretNRIC {
+pub struct PySecretNRIC {
     pub rust_nric: NRIC,
 }
 
-impl fmt::Display for SecretNRIC {
+impl fmt::Display for PySecretNRIC {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
@@ -25,12 +26,12 @@ impl fmt::Display for SecretNRIC {
 }
 
 #[pymethods]
-impl SecretNRIC {
+impl PySecretNRIC {
     #[new]
-    pub fn new(string: String) -> PyResult<SecretNRIC> {
+    pub fn new(string: String) -> PyResult<Self> {
         let new_nric = NRIC::new(string);
         match new_nric {
-            Ok(new_nric) => Ok(SecretNRIC {
+            Ok(new_nric) => Ok(Self {
                 rust_nric: new_nric,
             }),
             Err(err) => Err(PyValueError::new_err(err)),
@@ -45,6 +46,16 @@ impl SecretNRIC {
         Ok("<SECRETNRIC>".to_string())
     }
 
+    pub fn encrypt(&self, filepath: &str, key: &str) -> anyhow::Result<String> {
+        let secret_string = SecretNRICString::new(&self.rust_nric);
+        Ok(secret_string.encrypt(filepath, key)?)
+    }
+
+    #[staticmethod]
+    pub fn decrypt(input: &str, filepath: &str, key: &str) -> anyhow::Result<String> {
+        Ok(SecretNRICString::decrypt(input, filepath, key)?)
+    }
+
     #[classmethod]
     pub fn __get_validators__(cls: &PyType) -> PyResult<&PyTuple> {
         let py = cls.py();
@@ -54,8 +65,8 @@ impl SecretNRIC {
 
     #[classmethod]
     #[pyo3(text_signature = "(value)")]
-    pub fn validate(_cls: &PyType, value: &PyAny) -> PyResult<SecretNRIC> {
+    pub fn validate(_cls: &PyType, value: &PyAny) -> PyResult<Self> {
         let v: String = value.extract::<String>()?;
-        SecretNRIC::new(v)
+        Self::new(v)
     }
 }
