@@ -14,7 +14,6 @@ pub struct SecretNRICString {
 }
 
 impl SecretNRICString {
-
     pub fn new(nric: NRIC, filepath: &str, key_var: &str) -> Result<Self> {
         let input: String = nric.to_string();
         // Load the environment variables from the `.env` file
@@ -85,7 +84,7 @@ impl SecretNRICString {
                 err
             )
         })?;
-        
+
         // Decode the Base64-encoded input string into a byte vector
         let encrypted_data = general_purpose::STANDARD_NO_PAD
             .decode(&input)
@@ -127,11 +126,11 @@ mod tests {
         let key_var = "SECRET_KEY";
         let nric: NRIC = NRIC::new("S1234567D".to_string())?;
         let secret_nric_string = SecretNRICString::new(nric, filepath, key_var)?;
-        
 
         // Encrypt the plaintext using the encrypt_string function
         // Decrypt the encrypted string using the decrypt_string function
-        let decrypted_string = SecretNRICString::decrypt(secret_nric_string.encrypted_nric, filepath, key_var)?;
+        let decrypted_string =
+            SecretNRICString::decrypt(secret_nric_string.encrypted_nric, filepath, key_var)?;
 
         // Check that the decrypted string matches the original plaintext
         assert_eq!(decrypted_string, "S1234567D");

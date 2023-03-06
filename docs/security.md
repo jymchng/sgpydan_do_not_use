@@ -20,7 +20,7 @@ class NotSoSecretNRIC(SecretNRIC):
 ```
 import inspect
 
-p = SecretNRIC("S6364259B") # 'valid' NRIC
+p = SecretNRIC("S6364259B", '.env.example', 'SECRET_KEY') # 'valid' NRIC
 
 inspect.getmembers(p)
 

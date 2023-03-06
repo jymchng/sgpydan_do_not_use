@@ -2,8 +2,8 @@ mod builder;
 mod digits;
 mod prefix;
 mod python;
-mod suffix;
 mod secret;
+mod suffix;
 
 pub mod nric;
 

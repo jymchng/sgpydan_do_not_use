@@ -74,7 +74,6 @@ fn inner_product(arr1: &[u8; 7], arr2: &[u8; 7]) -> u16 {
         .sum()
 }
 
-
 impl NRICBuilder<ICPrefix, ICDigits, NoICSuffix> {
     pub fn suffix(self, suffix: impl Into<String>) -> Result<NRIC, &'static str> {
         let suffix_enum: Result<ICSuffixEnum, _> = suffix.into().parse();
