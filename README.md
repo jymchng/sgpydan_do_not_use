@@ -53,7 +53,7 @@ Doesn't mean it is 'secured' because the value of the 'hidden' `NRIC` can still 
 ```
 import inspect
 
-p = SecretNRIC("S6364259B") # 'valid' NRIC
+p = SecretNRIC("S6364259B", '.env.example', 'SECRET_KEY') # 'valid' NRIC
 
 inspect.getmembers(p)
 
