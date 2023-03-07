@@ -17,37 +17,19 @@ impl SecretNRICString {
     pub fn new(nric: NRIC, filepath: &str, key_var: &str) -> Result<Self> {
         let input: String = nric.to_string();
         // Load the environment variables from the `.env` file
-        dotenv::from_filename(filepath).map_err(|err| {
-            anyhow!(
-                "Error loading environment variables from `.env` file, err={}",
-                err
-            )
-        })?;
-
-        // Find the value of the SECRET_KEY variable
-        let secret_key = env::var(key_var)
-            .map_err(|err| anyhow!("SECRET_KEY not found in `.env` file, err={}", err))?;
-        let secret_key: Vec<u8> = general_purpose::STANDARD_NO_PAD
-            .decode(&secret_key)
-            .map_err(|err| anyhow!("`SECRET_KEY` cannot be decoded, err={}", err))?;
-        let secret_array: [u8; 32] = secret_key.as_slice().try_into().map_err(|err| {
-            anyhow!(
-                "`secret_key` cannot be converted to `[u8,32]`, err: {}",
-                err
-            )
-        })?;
+        let secret_array = read_secret_key_parsed_to_array(filepath, key_var)?;
         // Generate a random nonce
         let mut nonce = [0u8; 12];
         rand::thread_rng().fill_bytes(&mut nonce);
 
         // Create the AES-256-GCM cipher
         let cipher = Aes256Gcm::new_from_slice(&secret_array)
-            .map_err(|err| anyhow!("Error creating cipher from secret key, err={}", err))?;
+            .map_err(|err| anyhow!("ERROR: Error creating cipher from secret key, err={}", err))?;
 
         // Encrypt the input string using the cipher and nonce
         let ciphertext = cipher
             .encrypt(&nonce.into(), input.as_bytes())
-            .map_err(|err| anyhow!("Error encrypting input string, err={}", err))?;
+            .map_err(|err| anyhow!("ERROR: Error encrypting input string, err={}", err))?;
 
         // Concatenate the nonce and ciphertext into a single byte vector
         let mut encrypted_data = Vec::new();
@@ -65,25 +47,7 @@ impl SecretNRICString {
     pub fn decrypt(input: impl Into<String>, filepath: &str, key_var: &str) -> Result<String> {
         let input: String = input.into();
         // Load the environment variables from the `.env` file
-        dotenv::from_filename(filepath).map_err(|err| {
-            anyhow!(
-                "Error loading environment variables from `.env` file, err={}",
-                err
-            )
-        })?;
-
-        // Find the value of the SECRET_KEY variable
-        let secret_key = env::var(key_var)
-            .map_err(|err| anyhow!("SECRET_KEY not found in `.env` file, err={}", err))?;
-        let secret_key: Vec<u8> = general_purpose::STANDARD_NO_PAD
-            .decode(&secret_key)
-            .map_err(|err| anyhow!("`SECRET_KEY` cannot be decoded, err={}", err))?;
-        let secret_array: [u8; 32] = secret_key.as_slice().try_into().map_err(|err| {
-            anyhow!(
-                "`secret_key` cannot be converted to `[u8,32]`, err: {}",
-                err
-            )
-        })?;
+        let secret_array = read_secret_key_parsed_to_array(filepath, key_var)?;
 
         // Decode the Base64-encoded input string into a byte vector
         let encrypted_data = general_purpose::STANDARD_NO_PAD
@@ -113,6 +77,29 @@ impl SecretNRICString {
 
         Ok(decrypted_string)
     }
+}
+
+fn read_secret_key_parsed_to_array(filepath: &str, key_var: &str) -> Result<[u8; 32]> {
+    dotenv::from_filename(filepath).map_err(|err| {
+        anyhow!(
+            "ERROR: Error loading environment variables from `.env` file, err={}",
+            err
+        )
+    })?;
+
+    // Find the value of the SECRET_KEY variable
+    let secret_key = env::var(key_var)
+        .map_err(|err| anyhow!("ERROR: `SECRET_KEY` not found in `.env` file, err={}", err))?;
+    let secret_key: Vec<u8> = general_purpose::STANDARD_NO_PAD
+        .decode(&secret_key)
+        .map_err(|err| anyhow!("ERROR: `SECRET_KEY` cannot be decoded, err={}", err))?;
+    let secret_array: [u8; 32] = secret_key.as_slice().try_into().map_err(|err| {
+        anyhow!(
+            "`secret_key` cannot be converted to `[u8,32]`, err: {}",
+            err
+        )
+    })?;
+    Ok(secret_array)
 }
 
 #[cfg(test)]
