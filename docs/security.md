@@ -18,11 +18,9 @@ class NotSoSecretNRIC(SecretNRIC):
 ## A. Cannot be found via `inspect.getmembers`
 
 ```
-import inspect
-
-p = SecretNRIC("S6364259B", '.env.example', 'SECRET_KEY') # 'valid' NRIC
-
-inspect.getmembers(p)
+>>> import inspect
+>>> p = SecretNRIC("S6364259B", '.env.example', 'SECRET_KEY') # 'valid' NRIC
+>>> inspect.getmembers(p)
 
 ... [('__class__', <class 'builtins.SecretNRIC'>), ('__delattr__', <method-wrapper '__delattr__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__dir__', 
 ... <built-in method __dir__ of builtins.SecretNRIC object at 0x00000238243EF870>), ('__doc__', None), ('__eq__', <method-wrapper '__eq__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__format__', <built-in method __format__ of builtins.SecretNRIC object at 0x00000238243EF870>), ('__ge__', <method-wrapper '__ge__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__get_validators__', <built-in method __get_validators__ of type object at 0x0000023823E42620>), ('__getattribute__', <method-wrapper '__getattribute__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__gt__', <method-wrapper '__gt__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__hash__', <method-wrapper '__hash__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__init__', <method-wrapper '__init__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__init_subclass__', <built-in method __init_subclass__ of type object at 0x0000023823E42620>), ('__le__', <method-wrapper '__le__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__lt__', <method-wrapper '__lt__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__module__', 'builtins'), ('__ne__', <method-wrapper '__ne__' of builtins.SecretNRIC object at 0x00000238243EF870>), ('__new__', 
@@ -32,23 +30,25 @@ inspect.getmembers(p)
 ## B. Cannot be found in `dir` and `vars`
 
 ```
-vars(p)
+>>> vars(p)
 ... Traceback (most recent call last):
 ...   File "<stdin>", line 1, in <module>
 ... TypeError: vars() argument must have __dict__ attribute
 
-dir(p)
+>>> dir(p)
 ... ['__class__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__get_validators__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', 
 ... '__subclasshook__', 'validate']
 ```
 
 ## C. Cannot be found in `gc` (garbage collector)
 ```
-import gc
-gc.get_referrers(p)
-
+>>> import gc
+>>> gc.get_referrers(p)
 ... [{'__name__': '__main__', '__doc__': None, '__package__': None, '__loader__': <class '_frozen_importlib.BuiltinImporter'>, '__spec__': None, '__annotations__': 
 ... {}, '__builtins__': <module 'builtins' (built-in)>, 'SecretNRIC': <class 'builtins.SecretNRIC'>, 'p': <SECRETNRIC>, 'gc': <module 'gc' (built-in)>}]
+
+>>> gc.get_referents()
+... []
 ```
 
 ## D. Accesses to the 'secret' value is gated by encryption

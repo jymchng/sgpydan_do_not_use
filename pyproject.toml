@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.7"
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.group.dependencies]
 maturin = "^0.14.15"
 
 [build-system]
