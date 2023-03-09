@@ -1,9 +1,9 @@
 mod utils;
 mod error;
 mod macros;
-mod inout;
+mod io;
 
 pub mod prelude {
-    pub use super::inout::*;
+    pub use super::io::*;
     pub use super::utils::*;
 }
