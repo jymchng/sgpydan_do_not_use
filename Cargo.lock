@@ -416,6 +416,7 @@ dependencies = [
  "base64",
  "clap",
  "dotenv",
+ "encryptable",
  "pyo3",
  "rand",
  "serde",

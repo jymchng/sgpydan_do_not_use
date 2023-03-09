@@ -9,9 +9,9 @@ edition = "2021"
 name = "gen_keys"
 path = "./src/gen_keys.rs"
 
-[[bin]]
-name = "gen_keypairs"
-path = "./src/gen_keypairs.rs"
+[lib]
+name = "encryptable"
+crate-type = ["cdylib"]
 
 [dependencies]
 clap = "3.0"

@@ -28,3 +28,4 @@ aes-gcm = "0.10.1"
 rand = "0.8.5"
 base64 = "0.21.0"
 serde-encrypt = "0.7.0"
+encryptable = { path = "../encryptable" }
