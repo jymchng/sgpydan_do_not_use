@@ -1,4 +1,4 @@
-mod inout;
+mod io;
 
 use anyhow::{anyhow, Result};
 use base64::{
@@ -74,8 +74,9 @@ fn main() {
             let rx_file = submatches.value_of("rx").unwrap();
             let tx_file = submatches.value_of("tx").unwrap();
 
-            let sender_secret_private_key = inout::get_secret_key_from_env(tx_file, "PRIVATE_KEY")
+            let sender_secret_private_key = io::get_secret_key_from_env(tx_file, "PRIVATE_KEY")
                 .expect("Expects: Key = `PRIVATE_KEY` in {tx_file}");
+            // how to get private_key struct from secretkey???
             let sender_private_key = sender_secret_private_key.into();
 
             let shared_key = serde_encrypt::shared_key::SharedKey::generate();
