@@ -11,8 +11,9 @@ use serde_encrypt::{
     key::key_pair::{ReceiverKeyPair, SenderKeyPair},
     shared_key::SharedKey,
     traits::SerdeEncryptPublicKey,
-    AsSharedKey, ReceiverKeyPairCore, SenderCombinedKey, SenderKeyPairCore, SenderPrivateKey
+    AsSharedKey, ReceiverKeyPairCore, SenderCombinedKey, SenderKeyPairCore, SenderPrivateKey,
 };
+use x25519_dalek::{SharedSecret, StaticSecret};
 
 static B64_GPSNP: GeneralPurpose = general_purpose::STANDARD_NO_PAD;
 
