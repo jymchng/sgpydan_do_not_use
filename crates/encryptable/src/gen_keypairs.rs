@@ -78,7 +78,6 @@ fn main() {
             let receiver_public_key_array =
                 io::get_env_key_as_array(tx_file, "RECEIVER_PUBLIC_KEY")
                     .expect("Expects: Key = `RECEIVER_PUBLIC_KEY` in {tx_file}");
-            // how to get private_key struct from secretkey???
             let sender_private_key = StaticSecret::from(sender_private_key_array);
             let receiver_public_key = PublicKey::from(receiver_public_key_array);
 
