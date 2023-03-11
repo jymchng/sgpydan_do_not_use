@@ -17,9 +17,9 @@ static B64_GPSNP: GeneralPurpose = general_purpose::STANDARD_NO_PAD;
 
 // https://github.com/laysakura/serde-encrypt/blob/main/serde-encrypt/tests/example_serde_encrypt_shared_key_encryption_with_key_exchange.rs
 fn main() {
-    let matches = App::new("key-pair-gen")
+    let matches = App::new("keypair-gen")
         .version("1.0")
-        .author("Your Name <you@example.com>")
+        .author("_ <_>")
         .subcommand(SubCommand::with_name("sender").about("Generate key pair for sender"))
         .subcommand(SubCommand::with_name("receiver").about("Generate key pair for receiver"))
         .subcommand(

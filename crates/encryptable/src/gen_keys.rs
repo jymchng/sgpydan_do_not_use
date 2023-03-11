@@ -9,7 +9,7 @@ use rand::{CryptoRng, Rng};
 fn main() {
     let matches = App::new("AES-256 Key Generator")
         .version("1.0")
-        .author("Jim Chng <jimchng@outlook.com>")
+        .author("_ <_>")
         .about("Generates a secure AES-256 key")
         .arg(
             Arg::new("out")
