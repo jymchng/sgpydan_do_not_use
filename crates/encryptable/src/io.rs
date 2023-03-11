@@ -1,5 +1,6 @@
-use crate::error;
 use crate::utils;
+use crate::error;
+
 use anyhow::{anyhow, Error, Result};
 use base64::{
     engine::{general_purpose, GeneralPurpose},
@@ -15,10 +16,10 @@ static B64_GPSNP: GeneralPurpose = general_purpose::STANDARD_NO_PAD;
 
 pub fn get_env_key_as_array(filepath: &str, key_var: &str) -> Result<[u8; 32]> {
     dotenv::from_filename(filepath)
-        .map_err(|err| anyhow!(Into::<Error>::into(error::Error::EnvIOError)))?;
+        .map_err(|_err| anyhow!(Into::<Error>::into(error::Error::EnvIOError)))?;
 
     // Find the value of the SECRET_KEY variable
-    let key = env::var(key_var).map_err(|err| {
+    let key = env::var(key_var).map_err(|_err| {
         anyhow!(Into::<Error>::into(error::Error::EnvKeyNotFound {
             env_key: key_var.to_string(),
             source: std::env::VarError::NotPresent
@@ -52,7 +53,7 @@ pub fn get_secret_key_from_env(filepath: &str, key_var: &str) -> Result<SecretKe
         .map_err(|err| anyhow!(Into::<Error>::into(error::Error::EnvIOError)))?;
 
     // Find the value of the SECRET_KEY variable
-    let key = env::var(key_var).map_err(|err| {
+    let key = env::var(key_var).map_err(|_err| {
         anyhow!(Into::<Error>::into(error::Error::EnvKeyNotFound {
             env_key: "SECRET_KEY".to_string(),
             source: std::env::VarError::NotPresent
