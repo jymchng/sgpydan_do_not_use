@@ -14,9 +14,9 @@ pub struct NoICSuffix;
 
 #[derive(Default)]
 pub struct NRICBuilder<P, D, S> {
-    pub prefix: Option<P>,
-    pub digits: Option<D>,
-    pub suffix: Option<S>,
+    prefix: Option<P>,
+    digits: Option<D>,
+    suffix: Option<S>,
 }
 
 impl NRICBuilder<NoICPrefix, NoICDigits, NoICSuffix> {
@@ -79,7 +79,7 @@ impl NRICBuilder<ICPrefix, ICDigits, NoICSuffix> {
         let suffix_enum: Result<ICSuffixEnum, _> = suffix.into().parse();
         match suffix_enum {
             Ok(suffix_enum) => {
-                let inner_prod = inner_product(&self.digits.as_ref().unwrap().0, &WEIGHTS);
+                let inner_prod = inner_product(self.digits.as_ref().unwrap().as_ref(), &WEIGHTS);
                 let prefix_value = self.prefix.as_ref().unwrap().0.value() as u16;
                 let validity = (inner_prod + prefix_value) % 11;
                 if suffix_enum.value() as u16 == validity {

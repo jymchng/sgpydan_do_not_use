@@ -1,5 +1,5 @@
 import pytest
-from nric_do_not_use import SecretNRIC, NRIC
+from nric_do_not_use import SecretNRIC
 
 
 @pytest.fixture

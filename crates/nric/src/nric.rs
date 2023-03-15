@@ -6,9 +6,9 @@ use std::fmt;
 
 #[derive(Debug, Clone)]
 pub struct NRIC {
-    pub prefix: ICPrefixEnum,
-    pub digits: ICDigits,
-    pub suffix: ICSuffixEnum,
+    pub(crate) prefix: ICPrefixEnum,
+    pub(crate) digits: ICDigits,
+    pub(crate) suffix: ICSuffixEnum,
 }
 
 impl fmt::Display for NRIC {
@@ -27,5 +27,17 @@ impl NRIC {
             .prefix(first_letter)?
             .digits(digits)?
             .suffix(last_letter)?)
+    }
+
+    pub fn prefix(&self) -> String {
+        self.prefix.to_string()
+    }
+
+    pub fn suffix(&self) -> String {
+        self.suffix.to_string()
+    }
+
+    pub fn digits(&self) -> String {
+        self.digits.to_string()
     }
 }

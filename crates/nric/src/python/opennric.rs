@@ -19,7 +19,7 @@ impl fmt::Display for PyNRIC {
         write!(
             f,
             "{}{}{}",
-            self.rust_nric.prefix, self.rust_nric.digits, self.rust_nric.suffix
+            self.rust_nric.prefix(), self.rust_nric.digits(), self.rust_nric.suffix()
         )
     }
 }
@@ -39,17 +39,17 @@ impl PyNRIC {
 
     #[getter]
     pub fn get_prefix(&self) -> PyResult<String> {
-        Ok(self.rust_nric.prefix.to_string())
+        Ok(self.rust_nric.prefix())
     }
 
     #[getter]
     pub fn get_suffix(&self) -> PyResult<String> {
-        Ok(self.rust_nric.suffix.to_string())
+        Ok(self.rust_nric.suffix())
     }
 
     #[getter]
     pub fn get_digits(&self) -> PyResult<String> {
-        Ok(self.rust_nric.digits.to_string())
+        Ok(self.rust_nric.digits())
     }
 
     pub fn __str__(&self) -> PyResult<String> {

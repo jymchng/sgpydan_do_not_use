@@ -4,7 +4,7 @@ use std::fmt;
 use std::ops::Deref;
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
-pub struct ICDigits(pub [u8; 7]);
+pub struct ICDigits([u8; 7]);
 
 impl ICDigits {
     pub fn new(values: [u8; 7]) -> Result<Self, &'static str> {
@@ -17,9 +17,15 @@ impl ICDigits {
 }
 
 impl Deref for ICDigits {
-    type Target = [u8];
+    type Target = [u8; 7];
 
-    fn deref(&self) -> &[u8] {
+    fn deref(&self) -> &[u8; 7] {
+        &self.0
+    }
+}
+
+impl AsRef<[u8; 7]> for ICDigits {
+    fn as_ref(&self) -> &[u8; 7] {
         &self.0
     }
 }
