@@ -21,7 +21,7 @@ This is a student project. This is done just for fun. Please do not use this for
 # 🗺️  What is this about?
 This package aims to provide custom data types in python, implemented in rust, for data models that are relevant in the Singaporean context.
 
-For now, only the `NRIC` data model is provided. Read more in the [docs](./docs/nric.md).
+For now, only the `NRIC` data model is provided. Read more in the [docs](docs/nric.md).
 
 ## 🧑🏼‍🚀 Why do this?
 
