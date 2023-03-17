@@ -10,7 +10,7 @@ The checksum algorithm is implemented using Rust, via the `TypeState` and `Build
 
 ## 😸 `SecretNRIC` is slightly more secured than pure-python implementations
 
-Read in detail in [docs](docs/security.md).
+Read in detail in [docs](security.md).
 
 ### 👩‍❤️‍👨 1. It is uninheritable.
 
@@ -41,7 +41,7 @@ inspect.getmembers(p)
 ... [('__class__', <class 'builtins.SecretNRIC'>), ('__delattr__', <method-wrapper '__delattr__' of builtins.SecretNRIC object at 0x00000238243EF870>), /.../, ('__subclasshook__', <built-in method __subclasshook__ of type object at 0x0000023823E42620>)]
 ```
 
-More examples on [docs](docs/security.md).
+More examples on [docs](security.md).
 
 ### 🕵️‍♂️ 3. Initialization of `SecretNRIC` automatically encrypts it. `.decrypt()` method gives access to 'secret' value using encryption (decryption).
 
