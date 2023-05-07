@@ -23,10 +23,10 @@ impl NRIC {
         let first_letter = &string[0..1]; // slice from index 0 to 1 (exclusive)
         let last_letter = &string[string.len() - 1..]; // slice from the last index to the end
         let digits: String = string.chars().filter(|c| c.is_digit(10)).collect(); // collect digits as string
-        Ok(NRICBuilder::new()
+        NRICBuilder::new()
             .prefix(first_letter)?
             .digits(digits)?
-            .suffix(last_letter)?)
+            .suffix(last_letter)
     }
 
     pub fn prefix(&self) -> String {

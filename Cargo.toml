@@ -3,7 +3,6 @@ resolver = "2"
 members = [
     "crates/nric",
     "crates/encryptable",
-    "crates/paynowqr",
 ]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

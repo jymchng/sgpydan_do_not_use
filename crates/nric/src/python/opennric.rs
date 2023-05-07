@@ -19,7 +19,9 @@ impl fmt::Display for PyNRIC {
         write!(
             f,
             "{}{}{}",
-            self.rust_nric.prefix(), self.rust_nric.digits(), self.rust_nric.suffix()
+            self.rust_nric.prefix(),
+            self.rust_nric.digits(),
+            self.rust_nric.suffix()
         )
     }
 }
@@ -57,7 +59,7 @@ impl PyNRIC {
     }
 
     pub fn __repr__(&self) -> PyResult<String> {
-        Ok(format!("<NRIC::{}>", self.to_string()))
+        Ok(format!("<NRIC::{}>", self))
     }
 
     #[classmethod]

@@ -12,7 +12,7 @@ pub enum ICPrefixEnum {
 }
 
 #[derive(Clone, PartialEq, Debug)]
-pub struct ICPrefix(pub ICPrefixEnum);
+pub struct ICPrefix(pub(crate) ICPrefixEnum);
 
 impl ICPrefixEnum {
     pub fn value(&self) -> u8 {

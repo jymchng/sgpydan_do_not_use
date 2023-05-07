@@ -30,7 +30,7 @@ pub enum ICSuffixEnum {
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
-pub struct ICSuffix(pub ICSuffixEnum);
+pub struct ICSuffix(pub(crate) ICSuffixEnum);
 
 impl ICSuffixEnum {
     // pub fn new(suffix_enum: ICSuffixEnum) -> Self {

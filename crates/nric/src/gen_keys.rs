@@ -1,7 +1,7 @@
 use base64::{engine::general_purpose, Engine as _};
 use clap::{App, Arg};
 use rand::rngs::OsRng;
-use rand::{CryptoRng, Rng};
+use rand::{Rng};
 
 fn main() {
     let matches = App::new("AES-256 Key Generator")
@@ -19,10 +19,10 @@ fn main() {
         .get_matches();
 
     let key = generate_aes256_key();
-    let encoded_key: String = general_purpose::STANDARD_NO_PAD.encode(&key);
+    let encoded_key: String = general_purpose::STANDARD_NO_PAD.encode(key);
 
     if let Some(filename) = matches.value_of("out") {
-        std::fs::write(filename, &key).expect("Failed to write key to file");
+        std::fs::write(filename, key).expect("Failed to write key to file");
     } else {
         println!("{:?}", encoded_key);
     }

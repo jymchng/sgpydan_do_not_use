@@ -3,8 +3,7 @@ use crate::nric::NRIC;
 use aes_gcm::{aead::Aead, Aes256Gcm, KeyInit};
 use anyhow::{anyhow, Result};
 use base64::{engine::general_purpose, Engine as _};
-use dotenv;
-use rand::{rngs::OsRng, RngCore};
+use rand::RngCore;
 use serde::{Deserialize, Serialize};
 use std::env;
 
@@ -44,14 +43,14 @@ impl SecretNRICString {
         })
     }
 
-    pub fn decrypt(input: impl Into<String>, filepath: &str, key_var: &str) -> Result<String> {
-        let input: String = input.into();
+    pub fn decrypt<I: AsRef<[u8]>>(input: I, filepath: &str, key_var: &str) -> Result<String> {
+        let input: &[u8] = input.as_ref();
         // Load the environment variables from the `.env` file
         let secret_array = read_secret_key_parsed_to_array(filepath, key_var)?;
 
         // Decode the Base64-encoded input string into a byte vector
         let encrypted_data = general_purpose::STANDARD_NO_PAD
-            .decode(&input)
+            .decode(input)
             .map_err(|err| anyhow!("Error decoding input string as Base64, err={}", err))?;
 
         // Split the encrypted data into the nonce and ciphertext
@@ -91,7 +90,7 @@ fn read_secret_key_parsed_to_array(filepath: &str, key_var: &str) -> Result<[u8;
     let secret_key = env::var(key_var)
         .map_err(|err| anyhow!("ERROR: `SECRET_KEY` not found in `.env` file, err={}", err))?;
     let secret_key: Vec<u8> = general_purpose::STANDARD_NO_PAD
-        .decode(&secret_key)
+        .decode(secret_key)
         .map_err(|err| anyhow!("ERROR: `SECRET_KEY` cannot be decoded, err={}", err))?;
     let secret_array: [u8; 32] = secret_key.as_slice().try_into().map_err(|err| {
         anyhow!(

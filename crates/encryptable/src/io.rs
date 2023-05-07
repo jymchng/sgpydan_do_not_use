@@ -26,7 +26,7 @@ pub fn get_env_key_as_array(filepath: &str, key_var: &str) -> Result<[u8; 32]> {
         }))
     })?;
     let key: Vec<u8> = B64_GPSNP
-        .decode(&key)
+        .decode(key)
         .map_err(|err| anyhow!("ERROR: {key_var} cannot be decoded, err={err}"))?;
     let array: [u8; 32] = key
         .as_slice()
@@ -50,7 +50,7 @@ pub fn write_keypairs_to_env_example(
 
 pub fn get_secret_key_from_env(filepath: &str, key_var: &str) -> Result<SecretKey> {
     dotenv::from_filename(filepath)
-        .map_err(|err| anyhow!(Into::<Error>::into(error::Error::EnvIOError)))?;
+        .map_err(|_err| anyhow!(Into::<Error>::into(error::Error::EnvIOError)))?;
 
     // Find the value of the SECRET_KEY variable
     let key = env::var(key_var).map_err(|_err| {
